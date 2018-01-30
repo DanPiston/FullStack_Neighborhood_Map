@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="css/app.css">
+  <title>Neighborhood Map</title>
+</head>
+
+<body>
+
+  <form class="search-form" data-bind="submit: filterSubmit">
+    <input data-bind="value: filterQuery" class="search-bar" placeholder="Search favorite places">
+    <button class="search-submit" type="submit">
+      <span>Search</span>
+    </button>
+  </form>
+
+  <div id="map"></div>
+
+  <div id="places" data-bind="css: placesListClass">
+    <button class="places-list-toggle" data-bind="click: togglePlacesList, text: toggleButtonText"></button>
+    <ul class="places-list" data-bind="foreach: { data: sortedPlaces, as: 'place' }">
+      <a class="place-link" href="#" data-bind="click: $parent.setCurrentPlace">
+        <li class="place-info" data-bind="css: {hidden : !visible(), current : $parent.currentPlace() === place}, attr: {id : marker.id}">
+              <p class="place-name" data-bind="text: name"></p>
+              <p class="place-address" data-bind="text: address"></p>
+
+        </li>
+      </a>
+    </ul>
+  </div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyA6qJI1Ghd8Gr5RGvDO491lozvpi7WXGzg"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
