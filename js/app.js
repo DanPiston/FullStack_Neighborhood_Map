@@ -97,21 +97,21 @@ let MapViewModel = function() {
     $.getJSON(listsUrl, getPlaceInfo);
     function getPlaceInfo(results) {
       // Retrive places from list for their ids
-      let places = results["response"]["list"]["listItems"]["items"];
+      let places = results.response.list.listItems.items;
 
       // Loop through places for their ids
       for (i = 0; i < places.length; i++) {
-        let id = places[i]['venue']['id'];
+        let id = places[i].venue.id;
         let venueUrl = 'https://api.foursquare.com/v2/venues/' + id +"?&client_id=" + client_id +"&client_secret=" + client_secret +"&v=20180130";
 
         // Retrive venue info from 4Square
         $.getJSON(venueUrl, getVenueInfo);
 
         // Pass vendor information to addMarker to create each place
-        function getVenueInfo(data) {
-          let restName = data["response"]["venue"]["name"];
-          let restAddress = data["response"]["venue"]["location"]["formattedAddress"].toString();
-          let restRating = data["response"]["venue"]["rating"];
+        var getVenueInfo = function(data) {
+          let restName = data.response.venue.name;
+          let restAddress = data.response.venue.location.formattedAddress.toString();
+          let restRating = data.response.venue.rating;
           let request = { query: restAddress };
           service.textSearch(request, function(results, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
