@@ -1,9 +1,7 @@
 const client_id = "F1OAP3TOGKR1HGKPVHV44NOZXRY0XSIA45MCUEWRZ13EJW43";
-const client_secret =
-  "MQFJB1QUTLDXAW3PSYUCSEUAJ2GVIXJDSBZNTBURJFQWCPHM";
+const client_secret = "MQFJB1QUTLDXAW3PSYUCSEUAJ2GVIXJDSBZNTBURJFQWCPHM";
 
 const listsUrl = "https://api.foursquare.com/v2/lists/5a6cc7dbdd8442362ecde70a?" +"&client_id=" + client_id +"&client_secret=" + client_secret +"&v=20180130";
-
 
 let Place = function(data) {
   let self = this;
@@ -19,7 +17,8 @@ let Place = function(data) {
     let output = '<div class="info-window">';
     output += '<p class="window-name">' + self.name + "</p>";
     output += '<p class="window-address">' + self.address + "</p>";
-    output += '<p class="window-rating">4Square Rating: ' + self.rating + "</p>";
+    output +=
+      '<p class="window-rating">4Square Rating: ' + self.rating + "</p>";
     output += "</div>";
     return output;
   });
@@ -106,14 +105,14 @@ let MapViewModel = function() {
         let venueUrl = 'https://api.foursquare.com/v2/venues/' + id +"?&client_id=" + client_id +"&client_secret=" + client_secret +"&v=20180130";
 
         // Retrive venue info from 4Square
-        $.getJSON(venueUrl, getVenueInfo)
+        $.getJSON(venueUrl, getVenueInfo);
 
         // Pass vendor information to addMarker to create each place
         function getVenueInfo(data) {
-          let restName = data['response']['venue']['name'];
-          let restAddress = data['response']['venue']['location']['formattedAddress'].toString();
-          let restRating = data['response']['venue']['rating'];
-          let request = {query: restAddress};
+          let restName = data["response"]["venue"]["name"];
+          let restAddress = data["response"]["venue"]["location"]["formattedAddress"].toString();
+          let restRating = data["response"]["venue"]["rating"];
+          let request = { query: restAddress };
           service.textSearch(request, function(results, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
               self.addMarker(restName, restRating, restAddress, results[0]);

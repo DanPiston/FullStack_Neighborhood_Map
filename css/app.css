@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto Slab', serif;
 }
 
 html,
@@ -11,21 +11,22 @@ body,
 }
 
 .search-form {
-    position: fixed;
-    top: 21px;
-    left: 21px;
-    z-index: 9999;
-    background: rgba(0, 0, 0, 0.25);
-    padding: 13px;
-    height: 55px;
+    background: rgba(54, 100, 114, 0.50);
+    border-radius: 5px;
     display: flex;
     flex-wrap: wrap;
+    height: 55px;
+    left: 21px;
+    position: fixed;
+    padding: 13px;
+    top: 21px;
+    z-index: 9999;
 }
 
 .search-bar,
 .search-submit {
-    height: 100%;
     border: none;
+    height: 100%;
 }
 
 .search-bar {
@@ -34,48 +35,51 @@ body,
 }
 
 .search-submit {
-    margin-left: 8px;
-    padding: 5px 13px;
     background: #333;
+    border-radius: 5px;
     color: white;
+    cursor: pointer;
     font-size: 14px;
     font-weight: bold;
+    margin-left: 8px;
+    padding: 5px 13px;
 }
 
 #places {
+    background: rgba(54, 100, 114, 0.50);
+    border-radius: 5px;
+    max-height: 90%;
     position: fixed;
     top: 21px;
     right: 34px;
-    width: 350px;
-    background: rgba(0, 0, 0, 0.25);
     padding: 8px 13px;
-    max-height: 90%;
     overflow-y: auto;
     transition: max-height 0.5s;
+    width: 350px;
 }
 
 #places.closed {
-    max-height: 41px;
+    max-height: 45px;
     overflow: hidden;
 }
 
 .places-list {
     list-style-type: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
 }
 
 .place-link {
-    text-decoration: none;
     color: #222;
-    margin: 8px 0;
     display: block;
+    margin: 8px 0;
+    text-decoration: none;
 }
 
 .place-info {
     background: white;
-    padding: 8px 13px;
     border: 2px solid rgba(0, 0, 0, 0.5);
+    padding: 8px 13px;
 }
 
 .place-info.current {
@@ -88,24 +92,26 @@ body,
 }
 
 .place-name {
-    margin-top: 0;
-    margin-bottom: 5px;
     font-weight: bold;
     font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 5px;
 }
 
 .place-address {
-    margin: 0;
     font-size: 13px;
+    margin: 0;
 }
 
 .places-list-toggle {
-    padding: 5px 13px;
     background: #333;
+    border: none;
+    border-radius: 5px;
     color: white;
+    cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    border: none;
+    padding: 5px 13px;
 }
 
 .info-window {
@@ -137,6 +143,7 @@ body,
         height: auto;
         padding: 13px 21px;
         font-size: 13px;
+        width: 100%;
     }
     #places {
         position: fixed;
@@ -147,7 +154,6 @@ body,
         max-height: 60%;
         margin: 0;
         padding: 0px;
-        border-top: 3px solid #333;
         -webkit-transition: max-height 0.5s;
         -moz-transition: max-height 0.5s;
         transition: max-height 0.5s;
@@ -166,6 +172,7 @@ body,
         font-size: 12px;
     }
     .places-list-toggle {
-        height: 30px;
+        height: 50px;
+        width: 100%;
     }
 }
