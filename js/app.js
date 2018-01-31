@@ -93,34 +93,36 @@ let MapViewModel = function() {
     // Creating a Google Place search object.  This will handle the work of finding location data
     let service = new google.maps.places.PlacesService(self.map);
 
+    let venues = [];
     // Building list of places from 4Square
     $.getJSON(listsUrl, getPlaceInfo);
     function getPlaceInfo(results) {
       // Retrive places from list for their ids
       let places = results.response.list.listItems.items;
 
-      // Loop through places for their ids
+      // Loop through places for their information
       for (i = 0; i < places.length; i++) {
-        let id = places[i].venue.id;
-        let venueUrl = 'https://api.foursquare.com/v2/venues/' + id +"?&client_id=" + client_id +"&client_secret=" + client_secret +"&v=20180130";
-
-        // Retrive venue info from 4Square
-        $.getJSON(venueUrl, getVenueInfo);
-
-        // Pass vendor information to addMarker to create each place
-        var getVenueInfo = function(data) {
-          let restName = data.response.venue.name;
-          let restAddress = data.response.venue.location.formattedAddress.toString();
-          let restRating = data.response.venue.rating;
-          let request = { query: restAddress };
-          service.textSearch(request, function(results, status) {
-            if (status == google.maps.places.PlacesServiceStatus.OK) {
-              self.addMarker(restName, restRating, restAddress, results[0]);
-            }
-          });
-        }
+        venues.push({
+          name: places[i].venue.name,
+          address: places[i].venue.location.formattedAddress.toString(),
+          rating: places[i].venue.rating
+        });
       }
+      for (var i in venues) { console.log( venues[i].name);}
     }
+    // TODO Figure out how to get the service search out of the for loop
+    
+      // let id = places[i].venue.id;
+      // let restName = places[i].venue.name;
+      // let restAddress = places[i].venue.location.formattedAddress.toString();
+      // let restRating = places[i].venue.rating;
+
+      let request = { query: restAddress };
+      service.textSearch(request, function(results, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          self.addMarker(restName, restRating, restAddress, results[0]);
+        }
+      });
   };
 
   this.addMarker = function(name, rating, address, placeData) {
