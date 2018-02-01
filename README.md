@@ -10,6 +10,7 @@ Using the App
 ------
 + To get the application running, simply git clone this repository to your local machine.  Navigate to the repo and open the index.html file with your browser.
 + The map is pretty self explanatory.  The search feature allows for basic search against the location's data; such as name, address, etc. 
++ The list of venues is built using the 4Square API, should you not see any venues please make sure you are receiving the appropriate response from the 4Square serve via the network tab.
 
 Resources Used
 ======
