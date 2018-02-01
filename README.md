@@ -8,7 +8,8 @@ I chose to use the 4Square API for my second API, as I knew I could get the loca
 
 Using the App
 ------
-The map is pretty self explanatory.  The search feature allows for basic search against the location's data; such as name, address, etc. 
++ To get the application running, simply git clone this repository to your local machine.  Navigate to the repo and open the index.html file with your browser.
++ The map is pretty self explanatory.  The search feature allows for basic search against the location's data; such as name, address, etc. 
 
 Resources Used
 ======
