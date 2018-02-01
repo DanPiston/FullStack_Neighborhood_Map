@@ -98,7 +98,7 @@ let MapViewModel = function() {
     // Take information and build markers for each venue
     function getVenueInfo(results) {
       let locations = results.response.list.listItems.items;
-      locations.forEach(function (place) {
+      locations.forEach(function(place) {
         let restName = place.venue.name;
         let restAddress = place.venue.location.formattedAddress.toString();
         let restRating = place.venue.rating;
