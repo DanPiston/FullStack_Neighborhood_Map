@@ -232,5 +232,5 @@ function googleSuccess() {
 }
 
 function googleError() {
-  console.log("Oh no!  Google Maps didn't load");
+  alert("Oh no!  Google Maps didn't load.  Please try reloading the page.");
 }
