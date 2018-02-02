@@ -1,8 +1,12 @@
 const client_id = "F1OAP3TOGKR1HGKPVHV44NOZXRY0XSIA45MCUEWRZ13EJW43";
 const client_secret = "MQFJB1QUTLDXAW3PSYUCSEUAJ2GVIXJDSBZNTBURJFQWCPHM";
-const listsUrl = "https://api.foursquare.com/v2/lists/5a6cc7dbdd8442362ecde70a?" +"&client_id=" + client_id +"&client_secret=" + client_secret +"&v=20180130";
-
-
+const listsUrl =
+  "https://api.foursquare.com/v2/lists/5a6cc7dbdd8442362ecde70a?" +
+  "&client_id=" +
+  client_id +
+  "&client_secret=" +
+  client_secret +
+  "&v=20180130";
 
 let Place = function(data) {
   let self = this;
@@ -87,27 +91,27 @@ let MapViewModel = function() {
 
     // AJAX call to build list of places from 4Square
     $.getJSON(listsUrl)
-     .done(
-      // Take information and build markers for each venue
+      .done(
+        // Take information and build markers for each venue
         function(results) {
-        let locations = results.response.list.listItems.items;
-        locations.forEach(function(place) {
-          let restName = place.venue.name;
-          let restAddress = place.venue.location.formattedAddress.toString();
-          let restRating = place.venue.rating;
-          let request = { query: restAddress };
-          service.textSearch(request, function(results, status) {
-            if (status == google.maps.places.PlacesServiceStatus.OK) {
-              self.addMarker(restName, restRating, restAddress, results[0]);
-            }
+          let locations = results.response.list.listItems.items;
+          locations.forEach(function(place) {
+            let restName = place.venue.name;
+            let restAddress = place.venue.location.formattedAddress.toString();
+            let restRating = place.venue.rating;
+            let request = { query: restAddress };
+            service.textSearch(request, function(results, status) {
+              if (status == google.maps.places.PlacesServiceStatus.OK) {
+                self.addMarker(restName, restRating, restAddress, results[0]);
+              }
+            });
           });
-        });
         }
       )
       .fail(function(jqxhr, textStatus, error) {
-       var err = textStatus + ", " + error;
-       alert("4Square Request failed: " + err);
-     });
+        var err = textStatus + ", " + error;
+        alert("4Square Request failed: " + err);
+      });
   };
 
   this.addMarker = function(name, rating, address, placeData) {
@@ -120,20 +124,12 @@ let MapViewModel = function() {
       position: placeData.geometry.location,
       rating: rating,
       animation: google.maps.Animation.DROP,
+      id: name
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .slice(0, 15)
     });
-
-    google.maps.event.addListener(marker, "click", function() {
-      // TODO find a way to trigger the info window on marker click.
-      $("#" + marker.id).trigger("click");
-      if (marker.getAnimation() !== null) {
-        marker.setAnimation(null);
-      } else {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function() {
-          marker.setAnimation(null);
-        }, 750);
-      }
-    });
+    marker.addListener("click", this.handleMarkerClick);
 
     // this is where the pin actually gets added to the map.
     // bounds.extend() takes in a map location object
@@ -171,36 +167,50 @@ let MapViewModel = function() {
   this.filterQuery = ko.observable("");
   // Filter venues as the user types
   this.filterVenues = ko.computed(function() {
-    var letters = self.filterQuery().toLowerCase();
-      self.places().forEach(function(place) {
-        let name = place.name.toLowerCase();
-        let address = place.address.toLowerCase();
+    let letters = self.filterQuery().toLowerCase();
+    self.places().forEach(function(place) {
+      let name = place.name.toLowerCase();
+      let address = place.address.toLowerCase();
       if (name.indexOf(letters) === -1 && address.indexOf(letters) === -1) {
-          place.visible(false);
-          place.marker.setMap(null);
-        } else {
-          place.visible(true);
-          place.marker.setMap(self.map);
-        }
-      });
+        place.visible(false);
+        place.marker.setMap(null);
+      } else {
+        place.visible(true);
+        place.marker.setMap(self.map);
+      }
     });
+  });
 
   this.togglePlacesList = function() {
     self.placesListOpen(!self.placesListOpen());
   };
 
+  this.handleMarkerClick = function(event) {
+    const place = self
+      .places()
+      .find(
+        place =>
+          place.marker.position.lat() === event.latLng.lat() &&
+          place.marker.position.lng() === event.latLng.lng()
+      );
+    self.setCurrentPlace(place);
+  };
+
+  this.animateMarker = function(place) {
+    self.displayInfo(place);
+    if (place.marker.getAnimation() !== null) {
+      place.marker.setAnimation(null);
+    } else {
+      place.marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function() {
+        place.marker.setAnimation(null);
+      }, 750);
+    }
+  };
   this.setCurrentPlace = function(place) {
     if (self.currentPlace() !== place) {
-      if (place.marker.getAnimation() !== null) {
-        place.marker.setAnimation(null);
-      } else {
-        place.marker.setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function() {
-          place.marker.setAnimation(null);
-        }, 750);
-      }
+      self.animateMarker(place);
       self.currentPlace(place);
-      self.displayInfo(place);
     } else {
       self.currentPlace(null);
       self.infoWindow.close();
@@ -217,10 +227,10 @@ let MapViewModel = function() {
   this.init();
 };
 
-function googleSuccess () {
+function googleSuccess() {
   ko.applyBindings(new MapViewModel());
 }
 
-function googleError () {
+function googleError() {
   console.log("Oh no!  Google Maps didn't load");
 }
