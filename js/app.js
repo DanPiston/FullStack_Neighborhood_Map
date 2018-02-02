@@ -54,14 +54,6 @@ let MapViewModel = function() {
     }
   });
 
-  this.filterQuery = ko.observable("");
-  this.filterWords = ko.computed(function() {
-    return self
-      .filterQuery()
-      .toLowerCase()
-      .split(" ");
-  });
-
   this.init = function() {
     this.neightborhood = new google.maps.LatLng(40.3262227, -75.3457161);
     let mapOptions = {
@@ -96,7 +88,7 @@ let MapViewModel = function() {
     $.getJSON(listsUrl)
      .done(
       // Take information and build markers for each venue
-      function (results) {
+        function(results) {
         let locations = results.response.list.listItems.items;
         locations.forEach(function(place) {
           let restName = place.venue.name;
@@ -109,8 +101,9 @@ let MapViewModel = function() {
             }
           });
         });
-      })
-     .fail(function( jqxhr, textStatus, error) {
+        }
+      )
+      .fail(function(jqxhr, textStatus, error) {
        var err = textStatus + ", " + error;
        alert("4Square Request failed: " + err);
      });
@@ -177,13 +170,15 @@ let MapViewModel = function() {
     self.map.panTo(place.marker.position);
   };
 
-  this.filterSubmit = function() {
-    self.filterWords().forEach(function(word) {
+  this.filterQuery = ko.observable("");
+
+  // Filter venues as the user types
+  this.filterVenues = ko.computed(function() {
+    var letters = self.filterQuery().toLowerCase();
       self.places().forEach(function(place) {
         let name = place.name.toLowerCase();
         let address = place.address.toLowerCase();
-
-        if (name.indexOf(word) === -1 && address.indexOf(word) === -1) {
+      if (name.indexOf(letters) === -1 && address.indexOf(letters) === -1) {
           place.visible(false);
           place.marker.setMap(null);
         } else {
@@ -192,8 +187,6 @@ let MapViewModel = function() {
         }
       });
     });
-    self.filterQuery("");
-  };
 
   this.togglePlacesList = function() {
     self.placesListOpen(!self.placesListOpen());
@@ -218,4 +211,4 @@ let MapViewModel = function() {
   this.init();
 };
 
-$(ko.applyBindings(new MapViewModel()));
+ko.applyBindings(new MapViewModel());

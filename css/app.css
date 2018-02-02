@@ -34,16 +34,6 @@ body,
     width: 233px;
 }
 
-.search-submit {
-    background: #333;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    margin-left: 8px;
-    padding: 5px 13px;
-}
 
 #places {
     background: rgba(54, 100, 114, 0.50);
@@ -135,15 +125,6 @@ body,
     .search-bar {
         width: 100%;
         font-size: 12px;
-    }
-    .search-submit {
-        padding: 0;
-        margin-left: 0;
-        margin-top: 13px;
-        height: auto;
-        padding: 13px 21px;
-        font-size: 13px;
-        width: 100%;
     }
     #places {
         position: fixed;

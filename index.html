@@ -11,11 +11,8 @@
 
 <body>
 
-  <form class="search-form" data-bind="submit: filterSubmit">
-    <input data-bind="value: filterQuery" class="search-bar" placeholder="Search favorite places">
-    <button class="search-submit" type="submit">
-      <span>Search</span>
-    </button>
+  <form class="search-form" >
+    <input data-bind="textInput: filterQuery" class="search-bar" placeholder="Search favorite places">
   </form>
 
   <div id="map"></div>
@@ -35,7 +32,7 @@
 
   <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyA6qJI1Ghd8Gr5RGvDO491lozvpi7WXGzg"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
   <script src="js/app.js"></script>
 </body>
 
