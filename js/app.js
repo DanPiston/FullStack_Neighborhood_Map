@@ -93,23 +93,27 @@ let MapViewModel = function() {
     let service = new google.maps.places.PlacesService(self.map);
 
     // AJAX call to build list of places from 4Square
-    $.getJSON(listsUrl, getVenueInfo);
-
-    // Take information and build markers for each venue
-    function getVenueInfo(results) {
-      let locations = results.response.list.listItems.items;
-      locations.forEach(function(place) {
-        let restName = place.venue.name;
-        let restAddress = place.venue.location.formattedAddress.toString();
-        let restRating = place.venue.rating;
-        let request = { query: restAddress };
-        service.textSearch(request, function(results, status) {
-          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            self.addMarker(restName, restRating, restAddress, results[0]);
-          }
+    $.getJSON(listsUrl)
+     .done(
+      // Take information and build markers for each venue
+      function (results) {
+        let locations = results.response.list.listItems.items;
+        locations.forEach(function(place) {
+          let restName = place.venue.name;
+          let restAddress = place.venue.location.formattedAddress.toString();
+          let restRating = place.venue.rating;
+          let request = { query: restAddress };
+          service.textSearch(request, function(results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+              self.addMarker(restName, restRating, restAddress, results[0]);
+            }
+          });
         });
-      });
-    }
+      })
+     .fail(function( jqxhr, textStatus, error) {
+       var err = textStatus + ", " + error;
+       alert("4Square Request failed: " + err);
+     });
   };
 
   this.addMarker = function(name, rating, address, placeData) {
