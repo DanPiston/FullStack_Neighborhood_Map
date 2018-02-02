@@ -2,6 +2,8 @@ const client_id = "F1OAP3TOGKR1HGKPVHV44NOZXRY0XSIA45MCUEWRZ13EJW43";
 const client_secret = "MQFJB1QUTLDXAW3PSYUCSEUAJ2GVIXJDSBZNTBURJFQWCPHM";
 const listsUrl = "https://api.foursquare.com/v2/lists/5a6cc7dbdd8442362ecde70a?" +"&client_id=" + client_id +"&client_secret=" + client_secret +"&v=20180130";
 
+
+
 let Place = function(data) {
   let self = this;
 
@@ -53,7 +55,6 @@ let MapViewModel = function() {
       return "closed";
     }
   });
-
   this.init = function() {
     this.neightborhood = new google.maps.LatLng(40.3262227, -75.3457161);
     let mapOptions = {
@@ -119,13 +120,10 @@ let MapViewModel = function() {
       position: placeData.geometry.location,
       rating: rating,
       animation: google.maps.Animation.DROP,
-      id: name
-        .toLowerCase()
-        .replace(/[^a-zA-Z0-9]/g, "")
-        .slice(0, 15)
     });
 
     google.maps.event.addListener(marker, "click", function() {
+      // TODO find a way to trigger the info window on marker click.
       $("#" + marker.id).trigger("click");
       if (marker.getAnimation() !== null) {
         marker.setAnimation(null);
@@ -171,7 +169,6 @@ let MapViewModel = function() {
   };
 
   this.filterQuery = ko.observable("");
-
   // Filter venues as the user types
   this.filterVenues = ko.computed(function() {
     var letters = self.filterQuery().toLowerCase();
@@ -194,6 +191,14 @@ let MapViewModel = function() {
 
   this.setCurrentPlace = function(place) {
     if (self.currentPlace() !== place) {
+      if (place.marker.getAnimation() !== null) {
+        place.marker.setAnimation(null);
+      } else {
+        place.marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+          place.marker.setAnimation(null);
+        }, 750);
+      }
       self.currentPlace(place);
       self.displayInfo(place);
     } else {
@@ -203,6 +208,7 @@ let MapViewModel = function() {
     }
   };
 
+  // Recenters map when closing venue
   this.resetCenter = function() {
     self.map.fitBounds(self.mapBounds);
     self.map.panTo(self.mapBounds.getCenter());
@@ -211,4 +217,10 @@ let MapViewModel = function() {
   this.init();
 };
 
-ko.applyBindings(new MapViewModel());
+function googleSuccess () {
+  ko.applyBindings(new MapViewModel());
+}
+
+function googleError () {
+  console.log("Oh no!  Google Maps didn't load");
+}
